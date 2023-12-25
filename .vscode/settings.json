@@ -1,0 +1,13 @@
+{
+    "json.schemaDownload.enable": true,
+    "workbench.colorCustomizations": {
+        "[Default Dark Modern]": {
+            // "titleBar.activeBackground": "#69a6f5",
+            // "titleBar.activeForeground": "#000000",
+            "activityBar.background": "#69a6f5",
+            "activityBar.foreground": "#000000",
+            "activityBar.activeBackground": "#dfdede",
+            "activityBar.inactiveForeground": "#000000",
+        }
+    },
+}

@@ -1,0 +1,6 @@
+node_modules
+.env
+data/
+data/connection
+data/connection/mysql.js
+logs/

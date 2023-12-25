@@ -1,0 +1,23 @@
+rec
+
+let sql = query.optimize.rec(table.payment, options.filter, options.order)
+    my.query(sql.query, options.parameter, (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })
+
+src
+
+let sql = query.optimize.src(table.payment, helper.filters, [id?.Asc()])
+    my.query(sql.query, helper.parameters, (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })
+
+get
+
+let sql = query.optimize.get(table.payment, table.payment.fields.id)
+    my.query(sql.query, [param.id], (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })

@@ -1,0 +1,201 @@
+html,
+body {
+  background-color: #f3f4f6;
+}
+
+svg.fill-primary>path {
+  fill: var(--primary-color);
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.linebreak {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+@keyframes propagate-1 {
+  25% {
+    transform: translateX(-1rem) scale(0.75)
+  }
+
+  50% {
+    transform: translateX(-3rem) scale(0.6)
+  }
+
+  75% {
+    transform: translateX(-5rem) scale(0.5)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-1 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #0359f8;
+  border-radius: 50%;
+  animation-name: propagate-1;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes propagate-2 {
+  25% {
+    transform: translateX(-1rem) scale(0.75)
+  }
+
+  50% {
+    transform: translateX(-3rem) scale(0.6)
+  }
+
+  75% {
+    transform: translateX(-3rem) scale(0.6)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-2 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #033daa;
+  border-radius: 50%;
+  animation-name: propagate-2;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes propagate-3 {
+  25% {
+    transform: translateX(-1rem) scale(0.75)
+  }
+
+  75% {
+    transform: translateX(-1rem) scale(0.75)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-3 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #022a75;
+  border-radius: 50%;
+  animation-name: propagate-3;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes propagate-4 {
+  25% {
+    transform: translateX(1rem) scale(0.75)
+  }
+
+  75% {
+    transform: translateX(1rem) scale(0.75)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-4 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #022a75;
+  border-radius: 50%;
+  animation-name: propagate-4;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes propagate-5 {
+  25% {
+    transform: translateX(1rem) scale(0.75)
+  }
+
+  50% {
+    transform: translateX(3rem) scale(0.6)
+  }
+
+  75% {
+    transform: translateX(3rem) scale(0.6)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-5 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #033daa;
+  border-radius: 50%;
+  animation-name: propagate-5;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes propagate-6 {
+  25% {
+    transform: translateX(1rem) scale(0.75)
+  }
+
+  50% {
+    transform: translateX(3rem) scale(0.6)
+  }
+
+  75% {
+    transform: translateX(5rem) scale(0.5)
+  }
+
+  95% {
+    transform: translateX(0rem) scale(1)
+  }
+}
+
+.anim-propagate-6 {
+  position: absolute;
+  font-size: 5px;
+  width: 15px;
+  height: 15px;
+  background: #0359f8;
+  border-radius: 50%;
+  animation-name: propagate-6;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}

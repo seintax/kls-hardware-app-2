@@ -1,0 +1,54 @@
+{
+	// Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"Client Service": {
+		"scope": "javascriptreact",
+		"prefix": "tmpService",
+		"body": [
+			"import axios from 'axios'",
+			"const BASE_URL = import.meta.env.MODE === 'development' ? ",
+			"import.meta.env.VITE_API_BASE_URL : ",
+			"import.meta.env.VITE_API_BASE_URL_PROD",
+			"",
+			"export const fetch${1:Service} = async (search = '') => {",
+			"const opt = { params: { search: search } }",
+			"const res = await axios.get(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}`, opt)",
+			"return res.data",
+			"}",
+			"",
+			"export const create${1:Service} = async (data) => {",
+			"const res = await axios.post(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}`, data)",
+			"return res.data",
+			"}",
+			"",
+			"export const update${1:Service} = async (data) => {",
+			"const res = await axios.patch(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}`, data)",
+			"return res.data",
+			"}",
+			"",
+			"export const delete${1:Service} = async (id) => {",
+			"const opt = { data: { id: id } }",
+			"const res = await axios.delete(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}`, opt)",
+			"return res.data",
+			"}",
+			"",
+			"export const search${1:Service} = async (search) => {",
+			"const opt = { params: { search: search } }",
+			"const res = await axios.get(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}/search`, opt)",
+			"return res.data",
+			"}",
+			"",
+			"export const fetch${1:Service}ById = async (id) => {",
+			"const opt = { params: { id: id } }",
+			"const res = await axios.get(`\\${BASE_URL}/${2:Location}/${1/(.*)/${1:/downcase}/}/element`, opt)",
+			"return res.data",
+			"}",
+		],
+		"description": ""
+	}
+}

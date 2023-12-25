@@ -1,0 +1,57 @@
+{
+	// Place your web-jbs-hardware workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"Client Index": {
+		"scope": "javascriptreact",
+		"prefix": "tmpIndex",
+		"body": [
+			"import { useEffect, useState } from 'react'",
+			"import { useQuery } from 'react-query'",
+			"import { useClientContext } from '../../../utilities/context/client.context'",
+			"import DataIndex from '../../../utilities/interface/datastack/data.index'",
+			"import { search${1:ModuleName} } from './${1/(.*)/${1:/downcase}/}.services'",
+			"import ${1:ModuleName}Manage from './${1/(.*)/${1:/downcase}/}.manage'",
+			"import ${1:ModuleName}Records from './${1/(.*)/${1:/downcase}/}.records'",
+			"",
+			"const ${1:ModuleName}Index = () => {",
+			"const { search } = useClientContext()",
+			"const name = '${1:ModuleName}'",
+			"const { data, isLoading, isError, refetch } = useQuery(`${name.toLowerCase()}-index`, () => search${1:ModuleName}(search.key))",
+			"const [manage, setManage] = useState(false)",
+			"const [id, setId] = useState()",
+			"",
+			"useEffect(() => { refetch() }, [search])",
+			"",
+			"return (",
+			"(manage) ? (",
+			"<${1:ModuleName}Manage id={id} name={name} manage={setManage} />",
+			") : (",
+			"<DataIndex",
+			"data={data}",
+			"name={name}",
+			"setter={setId}",
+			"manage={setManage}",
+			"isError={isError}",
+			"isLoading={isLoading}",
+			">",
+			"<${1:ModuleName}Records",
+			"setter={setId}",
+			"manage={setManage}",
+			"refetch={refetch}",
+			"data={data?.result || []}",
+			"/>",
+			"</DataIndex >",
+			")",
+			")",
+			"}",
+			"",
+			"export default ${1:ModuleName}Index",
+		],
+		"description": ""
+	}
+}

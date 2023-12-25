@@ -1,0 +1,134 @@
+const router = require('express').Router()
+const service = require('./conversion.query')
+
+router.route('/conversion')
+    .get(async (req, res) => {
+        await service.selectRecord(req.query, (err, ans) => {
+            if (err) return res.status(200).json({
+                success: false, error: err
+            })
+            return res.status(200).json({
+                success: true,
+                result: ans || {},
+            })
+        })
+    })
+    .post(async (req, res) => {
+        await service.createRecord(req.body, (err, ans) => {
+            if (err) return res.status(200).json({
+                success: false, error: err
+            })
+            return res.status(200).json({
+                success: true,
+                result: ans || {},
+            })
+        })
+    })
+    .patch(async (req, res) => {
+        await service.updateRecord(req.body, (err, ans) => {
+            if (err) return res.status(200).json({
+                success: false, error: err
+            })
+            return res.status(200).json({
+                success: true,
+                result: ans || {},
+            })
+        })
+    })
+    .delete(async (req, res) => {
+        await service.deleteRecord(req.body, (err, ans) => {
+            if (err) return res.status(200).json({
+                success: false, error: err
+            })
+            return res.status(200).json({
+                success: true,
+                result: ans || {},
+            })
+        })
+    })
+
+router.get('/conversion/element', async (req, res) => {
+    await service.uniqueRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans.length === 1 ? ans[0] : {} || {},
+        })
+    })
+})
+
+router.get('/conversion/available', async (req, res) => {
+    await service.availableRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.get('/conversion/search', async (req, res) => {
+    await service.searchRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.get('/conversion/inventory', async (req, res) => {
+    await service.inventoryRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.patch('/conversion/transfer', async (req, res) => {
+    await service.transferRecord(req.body, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.post('/conversion/batch', async (req, res) => {
+    await service.batchRecord(req.body, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.post('/conversion/return', async (req, res) => {
+    await service.returnRecord(req.body, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+module.exports = router
