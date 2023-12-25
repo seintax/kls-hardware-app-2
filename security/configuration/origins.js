@@ -1,6 +1,6 @@
 const validorigins = [
     'http://localhost:5173',
-    'https://jbshardware.jally.company'
+    'https://jbselsalvador.jally.company'
 ]
 
 module.exports = validorigins
