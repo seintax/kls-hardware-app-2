@@ -1,0 +1,9 @@
+Conversion:
+    - Where acquisition is "CONVERSION":
+    - Must update the following => pos_stock_inventory: {invt_conv_count,invt_conv_total}
+    Dispensing:
+        - Must deduct the following => pos_stock_inventory: {invt_conv_spare}
+    Returns:
+        - Must add the following => pos_stock_inventory: {invt_conv_spare}
+    Sales:
+        - Must reference the source inventory and calculate the equivalent quantity of item dispensed (expecting decimals in sales input)
