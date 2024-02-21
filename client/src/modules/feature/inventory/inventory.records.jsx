@@ -1,4 +1,4 @@
-import { ExclamationTriangleIcon } from "@heroicons/react/24/solid"
+import { ExclamationTriangleIcon, PresentationChartLineIcon } from "@heroicons/react/24/solid"
 import moment from "moment"
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
@@ -30,16 +30,10 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
         style: '',
         items: [
             { name: 'Product Name', stack: false, sort: 'name' },
-            // { name: 'Supplier', stack: true, sort: 'supplier', size: 200 },
+            { name: '', stack: true, size: 50 },
             { name: 'Delivery', stack: true, sort: 'drno', size: 280 },
-            // { name: 'Received/Cost', stack: true, sort: 'received', size: 130 },
             { name: 'Supply', stack: true, sort: 'stocks', size: 130 },
             { name: 'Price', stack: true, sort: 'price', size: 130 },
-            // { name: 'Vatable', stack: true, size: 50, position: "text-center" },
-            // { name: 'Divisible', stack: true, size: 50, position: "text-center" },
-            // { name: 'Sold', stack: true, size: 50 },
-            // { name: 'Transfer', stack: true, size: 50 },
-            // { name: 'Convert', stack: true, size: 50 },
             { name: 'Details', stack: true, size: 210 },
             { name: '', stack: false, screenreader: 'Action', size: 150 },
         ]
@@ -154,6 +148,14 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
         navigate(`/inventory/${item.id}/history`)
     }
 
+    const goToLedger = (item) => {
+        setSelected(prev => ({
+            ...prev,
+            inventory: { id: item.id, key: `${item.name} ${item.details} ${item.unit}` }
+        }))
+        navigate(`/inventory/${item.product}/ledger`)
+    }
+
     const items = (item) => {
         return [
             {
@@ -162,11 +164,18 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
                         <div>
                             <span className="text-blue-700 hover:text-blue-800 cursor-pointer">{`${item.name}`}</span>
                         </div>
-                        <div className="text-[10px]"><b className="text-blue-700">{item.details}</b> {item.unit}</div>
+                        <div className="text-[10px]">
+                            <b className="text-blue-700">{item.details}</b> {item.unit}
+                        </div>
                     </>,
                 onclick: () => goToHistory(item)
             },
-            // { value: item.supplier },
+            {
+                value: <span>
+                    <PresentationChartLineIcon className="h-5 w-5 cursor-pointer text-blue-700 hover:text-blue-800 no-select" />
+                </span>,
+                onclick: () => goToLedger(item)
+            },
             {
                 value: (
                     <>
@@ -177,8 +186,6 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
                     </>
                 )
             },
-            // { value: `${item.received} (${currencyFormat.format(item.cost)})` },
-            // { value: item.stocks },
             {
                 value: (
                     <>
@@ -199,18 +206,11 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
                     </>
                 )
             },
-            // { value: currencyFormat.format(item.price) },
-            // { value: item.vatable },
-            // { value: item.isloose },
-            // { value: item.soldtotal },
-            // { value: item.trnitotal },
-            // { value: item.convtotal },
             {
                 value: (
                     <>
                         <div className="flex gap-2">
                             <span className="flex-none">Vatable: {item.vatable === "Y" ? "Yes" : "No"}</span>
-                            {/* <span className="flex-none">Divisible: {item.isloose}</span> */}
                         </div>
                         <div className="text-[10px] flex gap-2">
                             <span className="flex-none">Sold: {item.soldtotal}</span>

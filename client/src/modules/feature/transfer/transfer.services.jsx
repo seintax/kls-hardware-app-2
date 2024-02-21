@@ -81,3 +81,9 @@ export const fetchTransportedByInventory = async (item) => {
     const res = await axios.get(`${BASE_URL}/feature/transported/inventory`, opt)
     return res.data
 }
+
+export const fetchTransportedByProduct = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/feature/transported/product`, opt)
+    return res.data
+}

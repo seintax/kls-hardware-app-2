@@ -8,6 +8,21 @@ String.prototype.Desc = function () {
     return `${base} DESC`
 }
 
+String.prototype.SumAs = function (alias = undefined) {
+    let base = (this === undefined ? "" : this.toString())
+    return `SUM(${base}) AS ${alias}`
+}
+
+String.prototype.CountAs = function (alias = undefined) {
+    let base = (this === undefined ? "" : this.toString())
+    return `COUNT(${base}) AS ${alias}`
+}
+
+String.prototype.AliasAs = function (alias = undefined) {
+    let base = (this === undefined ? "" : this.toString())
+    return `${base} AS ${alias}`
+}
+
 String.prototype.Like = function (val = undefined) {
     let base = (this === undefined ? "" : this.toString())
     return `${base} LIKE ${val ? `'%${val}%'` : "?"}`

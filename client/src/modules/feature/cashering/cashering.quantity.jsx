@@ -35,7 +35,7 @@ const CasheringQuantity = ({ show, toggle, item, setitem, cart, setcart, vat, tr
         //         message: "You have an invalid applied price. Make sure that the current price is equivalent to the applied price when submitting."
         //     })
         //     return
-        // }
+        // } + Number(quantity)
         if (!quantity) {
             handleNotification({
                 type: 'error',
@@ -45,7 +45,7 @@ const CasheringQuantity = ({ show, toggle, item, setitem, cart, setcart, vat, tr
         }
         if (quantity) {
             let tax = (item.vatable === "Y" ? vat : 0)
-            let existing = cart?.filter((i => i.item === item.id))
+            let existing = cart?.filter((i => i.item === item.id && i.conv === item.conv))
             let totalqty = existing?.reduce((prev, curr) => prev + Number(curr?.input?.qty), 0) + Number(quantity)
             if (Number(item.stocks) < totalqty) {
                 handleNotification({

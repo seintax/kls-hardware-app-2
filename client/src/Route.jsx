@@ -25,6 +25,7 @@ const MasterlistIndex = lazy(() => import('./modules/feature/masterlist/masterli
 const InventoryIndex = lazy(() => import('./modules/feature/inventory/inventory.index'))
 const InventoryView = lazy(() => import('./modules/feature/inventory/inventory.registry'))
 const InventoryHistory = lazy(() => import('./modules/feature/inventory/inventory.history'))
+const InventoryLedger = lazy(() => import('./modules/feature/inventory/inventory.ledger'))
 const DeliveryIndex = lazy(() => import('./modules/feature/delivery/delivery.index'))
 const DeliveryView = lazy(() => import('./modules/feature/delivery/delivery.registry'))
 const TransferIndex = lazy(() => import('./modules/feature/transfer/transfer.index'))
@@ -102,6 +103,7 @@ const AppRoute = () => {
                     <Route index element={<AppLazy><InventoryIndex /></AppLazy>} />
                     <Route path="conversion" element={<AppLazy><InventoryView /></AppLazy>} />
                     <Route path=":id/history" element={<AppLazy><InventoryHistory /></AppLazy>} />
+                    <Route path=":id/ledger" element={<AppLazy><InventoryLedger /></AppLazy>} />
                 </Route>
                 <Route path="/delivery">
                     <Route index element={<AppLazy><DeliveryIndex /></AppLazy>} />

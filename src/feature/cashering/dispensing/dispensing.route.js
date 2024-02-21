@@ -119,6 +119,30 @@ router.get('/cashering/dispensing/inventory', async (req, res) => {
     })
 })
 
+router.get('/cashering/dispensing/productitem', async (req, res) => {
+    await service.productItemRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
+router.get('/cashering/dispensing/productconv', async (req, res) => {
+    await service.productConvRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
 router.post('/cashering/dispensing/migrate', async (req, res) => {
     await service.migrateRecord(req.body, (err, ans) => {
         if (err) return res.status(200).json({

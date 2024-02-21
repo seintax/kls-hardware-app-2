@@ -121,6 +121,23 @@ const inventoryRecord = async (param, callback) => {
     })
 }
 
+const productRecord = async (param, callback) => {
+    let { product, qty } = table.transported.fields
+    let { unit } = table.transported.joined
+    let options = {
+        fields: [product?.AliasAs('product'), unit?.AliasAs('unit'), qty?.SumAs('total')],
+        parameter: [param.product?.Exact(), "0"],
+        filter: [product?.Is(), qty?.Greater()],
+        group: [product, unit],
+        order: [product?.Asc()]
+    }
+    let sql = query.optimize.grp(options.fields, table.transported, options.filter, options.group, options.order)
+    my.query(sql.query, options.parameter, (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })
+}
+
 module.exports = {
     createRecord,
     updateRecord,
@@ -129,5 +146,6 @@ module.exports = {
     uniqueRecord,
     searchRecord,
     transferRecord,
-    inventoryRecord
+    inventoryRecord,
+    productRecord
 }
