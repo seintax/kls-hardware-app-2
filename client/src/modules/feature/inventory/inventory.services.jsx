@@ -50,6 +50,12 @@ export const fetchInventoryById = async (id) => {
     return res.data
 }
 
+export const fetchInventoryByProduct = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/feature/inventory/product`, opt)
+    return res.data
+}
+
 export const deliveryInventoryByRef = async (id) => {
     const opt = { params: { id: id } }
     const res = await axios.get(`${BASE_URL}/feature/inventory/delivery`, opt)
@@ -110,6 +116,12 @@ export const fetchConversionByAvailability = async (search = '') => {
 export const fetchConversionByInventory = async (item) => {
     const opt = { params: { item: item } }
     const res = await axios.get(`${BASE_URL}/feature/conversion/inventory`, opt)
+    return res.data
+}
+
+export const fetchConversionByProduct = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/feature/conversion/product`, opt)
     return res.data
 }
 

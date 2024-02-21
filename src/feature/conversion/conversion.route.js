@@ -95,6 +95,18 @@ router.get('/conversion/inventory', async (req, res) => {
     })
 })
 
+router.get('/conversion/product', async (req, res) => {
+    await service.productRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
 router.patch('/conversion/transfer', async (req, res) => {
     await service.transferRecord(req.body, (err, ans) => {
         if (err) return res.status(200).json({

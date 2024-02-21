@@ -91,6 +91,22 @@ const alias = (table) => {
     return names.join(", ")
 }
 
+const groupby = (fields) => {
+    let aliases = {}
+    fields.forEach((field) => {
+        const alias = field.split(" AS ")
+        const name = alias[1]
+        aliases = {
+            ...aliases,
+            [name]: name
+        }
+    })
+    return {
+        field: fields?.join(", "),
+        array: aliases
+    }
+}
+
 const fields = (table) => {
     let names = {}
     for (const prop in table.fields) {
@@ -152,6 +168,23 @@ const rec_ = (table, filter, order, limit) => {
     }
 }
 
+const qty_ = (table, filter, order, limit) => {
+    let condition = table?.conditional ? ` ${table?.conditional}` : ""
+    return {
+        query: `SELECT COUNT(*) AS qty FROM ${table.name}${condition} WHERE ${filter?.filter(f => f !== undefined)?.join(" AND ")}${order ? ` ORDER BY ${order.join(", ")}` : ""}${limit ? ` LIMIT ${limit}` : ""}`,
+        array: { qty: 'qty' }
+    }
+}
+
+const grp_ = (fields, table, filter, group, order, limit) => {
+    let condition = table?.conditional ? ` ${table?.conditional}` : ""
+    const grouped = groupby(fields)
+    return {
+        query: `SELECT ${grouped.field} FROM ${table.name}${condition} WHERE ${filter?.filter(f => f !== undefined)?.join(" AND ")}${group ? ` GROUP BY ${group.join(", ")}` : ""}${order ? ` ORDER BY ${order.join(", ")}` : ""}${limit ? ` LIMIT ${limit}` : ""}`,
+        array: grouped.array
+    }
+}
+
 // query builder for select
 const src = (table, filter, order, situational = []) => {
     let condition = table?.conditional ? ` ${table?.conditional}` : ""
@@ -209,10 +242,10 @@ const union = (array, base, order, limit) => {
         data?.options?.parameter?.map(param => {
             parameters.push(param)
         })
-        return `SELECT ${compare(base, data?.fields)} FROM ${data?.name} WHERE ${data?.options?.filter.join(" AND ")}`
+        return `(SELECT ${compare(base, data?.fields)} FROM ${data?.name} WHERE ${data?.options?.filter.join(" AND ")}${order ? ` ORDER BY ${order.join(", ")}` : ""})`
     })
     return {
-        query: `${sql.join(" UNION ")}${order ? ` ORDER BY ${order.join(", ")}` : ""}${limit ? ` LIMIT ${limit}` : ""}`,
+        query: `${sql.join(" UNION ")}${limit ? ` LIMIT ${limit}` : ""}`,
         parameter: parameters
     }
 }
@@ -235,6 +268,8 @@ const optimize = {
     rec: rec_,
     get: get_,
     src: src_,
+    qty: qty_,
+    grp: grp_,
 }
 
 module.exports = {

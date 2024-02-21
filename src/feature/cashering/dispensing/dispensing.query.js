@@ -150,6 +150,40 @@ const inventoryRecord = async (param, callback) => {
     })
 }
 
+const productItemRecord = async (param, callback) => {
+    let { product, conv, dispense } = table.dispensing.fields
+    let { unit } = table.dispensing.joined
+    let options = {
+        fields: [product?.AliasAs('product'), unit?.AliasAs('unit'), dispense?.SumAs('total')],
+        parameter: [param.product?.Exact(), "0", "0"],
+        filter: [product?.Is(), conv?.Is(), dispense?.Greater()],
+        group: [product, unit],
+        order: [product?.Asc()]
+    }
+    let sql = query.optimize.grp(options.fields, table.dispensing, options.filter, options.group, options.order)
+    my.query(sql.query, options.parameter, (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })
+}
+
+const productConvRecord = async (param, callback) => {
+    let { product, conv, dispense, id } = table.dispensing.fields
+    let { unit } = table.dispensing.joined
+    let options = {
+        fields: [product?.AliasAs('product'), unit?.AliasAs('unit'), dispense?.SumAs('total')],
+        parameter: [param.product?.Exact(), "0", "0"],
+        filter: [product?.Is(), conv?.Greater(), dispense?.Greater()],
+        group: [product, unit],
+        order: [product?.Asc()]
+    }
+    let sql = query.optimize.grp(options.fields, table.dispensing, options.filter, options.group, options.order)
+    my.query(sql.query, options.parameter, (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, query.mask(ans, sql.array))
+    })
+}
+
 const migrateRecord = async (param, callback) => {
     let batch = await Promise.all(param.data?.map(async item => {
         let response = await new Promise(async (resolve, reject) => {
@@ -177,5 +211,7 @@ module.exports = {
     transactionRecord,
     requestRecord,
     inventoryRecord,
+    productItemRecord,
+    productConvRecord,
     migrateRecord
 }

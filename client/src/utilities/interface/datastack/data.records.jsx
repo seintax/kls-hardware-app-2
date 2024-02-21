@@ -5,12 +5,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import DataPagination from "./data.pagination"
 
 const DataRecords = ({ columns, records, page, setPage, itemsperpage, setsorted, rowstyle, itemstyle, keeppagination, unmargined, summary }) => {
-    // const [page, setPage] = useState(1)
     const refList = useRef()
     const [data, setData] = useState()
     const [order, setOrder] = useState()
     const [pages, setPages] = useState(1)
     const [index, setIndex] = useState(0)
+    const [cachedOrder, setCachedOrder] = useState()
 
     useEffect(() => {
         setOrder(columns?.items?.map(col => {
@@ -28,12 +28,14 @@ const DataRecords = ({ columns, records, page, setPage, itemsperpage, setsorted,
         }
     }, [records, page])
 
-    const sortcallback = (index, column) => {
+    const sortcallback = (index) => {
+        let sortedcolumns = cachedOrder ?? order
+        let column = sortedcolumns[index]
         if (column.sort && setsorted) {
-            setsorted({ prop: column.sort, desc: column.order === "asc" })
-            let neworder = column.order === "desc" || column.order === "unsorted" ? "asc" : "desc"
-            let sortedcolumns = [...order]
+            let neworder = column.order !== "desc" ? "desc" : "asc"
             sortedcolumns[index].order = neworder
+            setsorted({ prop: column.sort, desc: neworder !== "asc" })
+            setCachedOrder(sortedcolumns)
             setOrder(sortedcolumns)
         }
     }

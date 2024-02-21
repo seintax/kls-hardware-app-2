@@ -1,4 +1,3 @@
-import { EyeIcon } from "@heroicons/react/24/solid"
 import bcrypt from "bcryptjs-react"
 import React, { useEffect, useState } from 'react'
 import { useLocation } from "react-router-dom"
@@ -163,7 +162,7 @@ const AccountProfile = () => {
                         />
                     </div>
                 </div>
-                <div className="mt-[100px]">
+                {/* <div className="mt-[100px]">
                     Change your password?
                 </div>
                 <div className="text-sm italic">
@@ -175,7 +174,7 @@ const AccountProfile = () => {
                         <input
                             type={view.current}
                             name="current"
-                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium uppercase"
+                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium"
                             placeholder="Your current password"
                             value={pass.current}
                             onChange={onPassChange}
@@ -191,7 +190,7 @@ const AccountProfile = () => {
                         <input
                             type={view.new}
                             name="new"
-                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium uppercase"
+                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium"
                             placeholder="Your New password"
                             value={pass.new}
                             onChange={onPassChange}
@@ -207,7 +206,7 @@ const AccountProfile = () => {
                         <input
                             type={view.confirm}
                             name="confirm"
-                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium uppercase"
+                            className="w-[350px] border-white border-b border-b-[#000000] focus:ring-0 focus:outline-none focus:ring-gray-400 focus:border-white focus:border-b focus:border-b-[#000000] font-medium"
                             placeholder="Confirm your password"
                             value={pass.confirm}
                             onChange={onPassChange}
@@ -216,7 +215,7 @@ const AccountProfile = () => {
                             <EyeIcon className="w-4 h-4" />
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="flex justify-start w-full mt-[100px]">
                     <button className="button-blue py-4 px-10" onClick={() => applyChanges()}>
                         Apply Changes

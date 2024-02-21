@@ -95,6 +95,18 @@ router.get('/cashering/returned/inventory', async (req, res) => {
     })
 })
 
+router.get('/cashering/returned/product', async (req, res) => {
+    await service.productRecord(req.query, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
 router.get('/cashering/returned/transaction', async (req, res) => {
     await service.transactionRecord(req.query, (err, ans) => {
         if (err) return res.status(200).json({

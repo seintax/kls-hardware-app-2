@@ -71,6 +71,18 @@ export const fetchDispensingByInventory = async (item) => {
     return res.data
 }
 
+export const fetchDispensingByProductItem = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/custom/cashering/dispensing/productitem`, opt)
+    return res.data
+}
+
+export const fetchDispensingByProductConv = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/custom/cashering/dispensing/productconv`, opt)
+    return res.data
+}
+
 export const migratePayment = async (data) => {
     const res = await axios.post(`${BASE_URL}/custom/cashering/payment/migrate`, data)
     return res.data
@@ -163,6 +175,12 @@ export const fetchReturnByInventory = async (item) => {
     return res.data
 }
 
+export const fetchReturnByProduct = async (product) => {
+    const opt = { params: { product: product } }
+    const res = await axios.get(`${BASE_URL}/custom/cashering/returned/product`, opt)
+    return res.data
+}
+
 export const fetchReturnByTransaction = async (code) => {
     const opt = { params: { code: code } }
     const res = await axios.get(`${BASE_URL}/custom/cashering/returned/transaction`, opt)
@@ -199,6 +217,18 @@ export const fetchShiftByStart = async (id, date) => {
 export const fetchShiftByAccount = async (id) => {
     const opt = { params: { id: id } }
     const res = await axios.get(`${BASE_URL}/custom/cashering/schedule/account`, opt)
+    return res.data
+}
+
+export const fetchShiftByLogged = async (id) => {
+    const opt = { params: { id: id } }
+    const res = await axios.get(`${BASE_URL}/custom/cashering/schedule/logged`, opt)
+    return res.data
+}
+
+export const fetchShiftByClosed = async (id) => {
+    const opt = { params: { id: id } }
+    const res = await axios.get(`${BASE_URL}/custom/cashering/schedule/closed`, opt)
     return res.data
 }
 
