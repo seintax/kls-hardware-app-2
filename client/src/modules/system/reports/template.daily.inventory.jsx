@@ -1,6 +1,8 @@
-import { FunnelIcon, PrinterIcon } from "@heroicons/react/24/solid"
+import { ArchiveBoxArrowDownIcon, FunnelIcon, PrinterIcon } from "@heroicons/react/24/solid"
+import { saveAs } from 'file-saver'
 import moment from "moment"
 import { useEffect, useState } from 'react'
+import * as XLSX from 'xlsx'
 import { useClientContext } from "../../../utilities/context/client.context"
 import { sortBy } from "../../../utilities/functions/array.functions"
 import { amount, currencyFormat } from "../../../utilities/functions/number.funtions"
@@ -88,6 +90,17 @@ const TemplateDailyInventory = ({ report, toggle }) => {
         window.open(`/#/print/${report}/${moment(filter.fr).format("MMDDYYYY")}`, '_blank')
     }
 
+    const exportData = () => {
+        if (data?.length) {
+            let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            const ws = XLSX.utils.json_to_sheet([{ ...filter }, ...data])
+            const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] }
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+            const excelData = new Blob([excelBuffer], { type: type })
+            saveAs(excelData, `${report?.toLowerCase()?.replaceAll("-", "_")}_exported_on_${moment(new Date()).format('YYYY_MM_DD_HH_mm_ss')}.xlsx`)
+        }
+    }
+
     useEffect(() => {
         return () => {
             localStorage.removeItem(report)
@@ -120,8 +133,12 @@ const TemplateDailyInventory = ({ report, toggle }) => {
                                 className="h-8 w-8 text-gray-700 hover:text-gray-500 cursor-pointer"
                             />
                         </button>
+                        <ArchiveBoxArrowDownIcon
+                            className="h-8 w-8 text-gray-700 hover:text-gray-500 cursor-pointer ml-auto mr-3"
+                            onClick={() => exportData()}
+                        />
                         <PrinterIcon
-                            className="h-8 w-8 text-gray-700 hover:text-gray-500 cursor-pointer ml-auto"
+                            className="h-8 w-8 text-gray-700 hover:text-gray-500 cursor-pointer"
                             onClick={() => printData()}
                         />
                     </div>

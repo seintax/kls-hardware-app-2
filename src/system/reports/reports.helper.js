@@ -48,10 +48,19 @@ const reports = {
             GROUP BY trns_date) AS sales_credit,
             SUM(IF(paym_method='CASH' AND paym_type='CREDIT', paym_amount, 0)) AS credit_cash,
             SUM(IF(paym_method='CHEQUE' AND paym_type='CREDIT', paym_amount, 0)) AS credit_cheque, 
-            SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', paym_amount, 0)) AS credit_gcash 
+            SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', paym_amount, 0)) AS credit_gcash,
+            returned 
         FROM
             (SELECT *,DATE(paym_time) AS paym_date FROM pos_payment_collection WHERE
             paym_time BETWEEN '@fr 00:00:01' AND '@to 23:59:59') arg
+            LEFT JOIN 
+                (SELECT
+                    DATE(rtrn_time) AS rtrn_date,
+                    SUM(rtrn_r_net) AS returned
+                FROM
+                    pos_return_transaction
+                GROUP BY DATE(rtrn_time)) a
+                    ON rtrn_date=paym_date
         GROUP BY paym_date
         ORDER BY paym_date DESC;
         `,
@@ -148,6 +157,53 @@ const reports = {
             rtrn_status='COMPLETED' AND 
             rtrn_time BETWEEN '@fr 00:00:01' AND '@to 23:59:59' 
         ORDER BY rtrn_trans
+    `,
+    runningStocks: `
+        SELECT 
+            prod_id AS id,
+            prod_name AS name,
+            prod_details AS details,
+            delivered,
+            converted,
+            dispensed,
+            transfered,
+            balance
+        FROM 
+            pos_stock_masterlist a
+            LEFT JOIN 
+                (SELECT
+                    invt_product,
+                    SUM(invt_received) AS delivered,
+                    SUM(invt_stocks) AS balance
+                FROM
+                    pos_stock_inventory
+                GROUP BY invt_product) b 
+                    ON invt_product=prod_id
+            LEFT JOIN 
+                (SELECT
+                    conv_product,
+                    SUM(conv_item_qty) AS converted
+                FROM
+                    pos_stock_conversion
+                GROUP BY conv_product) c 
+                    ON conv_product=prod_id
+            LEFT JOIN 
+                (SELECT
+                    sale_product,
+                    SUM(sale_dispense) AS dispensed
+                FROM
+                    pos_sales_dispensing
+                GROUP BY sale_product) d 
+                    ON sale_product=prod_id
+            LEFT JOIN 
+                (SELECT
+                    trni_product,
+                    SUM(trni_qty) AS transfered
+                FROM
+                    pos_stock_transfer_item
+                GROUP BY trni_product) e 
+                    ON trni_product=prod_id
+        ORDER BY prod_name,prod_details
     `,
 }
 
