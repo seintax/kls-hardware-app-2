@@ -15,6 +15,7 @@ import PrintDeliveryPayables from "./modules/system/prints/print.delivery.payabl
 import PrintDeliveryReceived from "./modules/system/prints/print.delivery.received"
 import PrintInventory from "./modules/system/prints/print.inventory"
 import PrintReceivableCollection from "./modules/system/prints/print.receivable.collection"
+import PrintRunningStocks from "./modules/system/prints/print.running.stocks"
 import AppEmpty from "./utilities/interface/application/errormgmt/app.empty"
 import AppErrorFallback from "./utilities/interface/application/errormgmt/app.fallback"
 import AppPageNotFound from "./utilities/interface/application/errormgmt/app.notfound"
@@ -92,6 +93,10 @@ const AppRoute = () => {
                 <Route path="cheque-monitor" >
                     <Route index element={<PrintChequeMonitor />} />
                     <Route path=":id" element={<PrintChequeMonitor />} />
+                </Route>
+                <Route path="running-stocks" >
+                    <Route index element={<PrintRunningStocks />} />
+                    <Route path=":id" element={<PrintRunningStocks />} />
                 </Route>
             </Route>
             <Route element={<DashboardIndex />}>

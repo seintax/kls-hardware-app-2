@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import AppLogo from "../../../utilities/interface/application/aesthetics/app.logo"
 import DataPrint from "../../../utilities/interface/datastack/data.print"
 
-const PrintDailySummary = () => {
-    const reportname = "daily-summary"
+const PrintRunningStocks = () => {
+    const reportname = "running-stocks"
     const [print, setprint] = useState({})
     const [records, setrecords] = useState([])
     const [total, settotal] = useState(0)
@@ -12,17 +12,12 @@ const PrintDailySummary = () => {
     const columns = {
         style: '',
         items: [
-            { name: 'Date', stack: false, sort: 'date' },
-            { name: <span>Cash</span>, stack: true, sort: 'sales_cash', size: 250, position: "text-center" },
-            { name: <span>Cheque</span>, stack: true, sort: 'sales_cheque', size: 250, position: "text-center" },
-            { name: <span>GCash</span>, stack: true, sort: 'sales_gcash', size: 250, position: "text-center" },
-            { name: <span>Credit</span>, stack: true, sort: 'sales_credit', size: 250, position: "text-center" },
-            { name: <span className="font-bold">Total Sales</span>, stack: true, size: 210, position: "text-center" },
-            { name: <span>Cash</span>, stack: true, sort: 'credit_cash', size: 250, position: "text-center" },
-            { name: <span>Cheque</span>, stack: true, sort: 'credit_cheque', size: 250, position: "text-center" },
-            { name: <span>GCash</span>, stack: true, sort: 'credit_gcash', size: 250, position: "text-center" },
-            { name: <span className="font-bold">Total Collected</span>, stack: true, size: 210, position: "text-center" },
-            { name: <span>Returned</span>, stack: true, sort: 'returned', size: 250, position: "text-center" },
+            { name: 'Item name', stack: false, sort: 'date' },
+            { name: 'Total Delivery', stack: true, sort: 'delivered', size: 250 },
+            { name: 'Total Sold', stack: true, sort: 'dispensed', size: 250 },
+            { name: 'Total Transfer', stack: true, sort: 'transfered', size: 250 },
+            { name: 'Total Converted', stack: true, sort: 'converted', size: 250 },
+            { name: 'Balance', stack: true, sort: 'balance', size: 250 },
         ]
     }
 
@@ -31,12 +26,10 @@ const PrintDailySummary = () => {
         setprint(storage)
         setrecords(storage?.data)
         setsummary(storage?.summary)
-        // settotal(storage?.data.reduce((prev, curr) => prev + Number(curr?.items[5].value.replaceAll(",", "")), 0))
-        // setcollection(storage?.data.reduce((prev, curr) => prev + Number(curr?.items[9].value.replaceAll(",", "")), 0))
     }, [localStorage.getItem(reportname)])
 
     const trigger = () => {
-        var css = '@page { size: landscape; }',
+        var css = '@page { size: portait; }',
             head = document.head || document.getElementsByTagName('head')[0],
             style = document.createElement('style')
 
@@ -68,7 +61,6 @@ const PrintDailySummary = () => {
                 <td colSpan={2} className=" py-3 border border-1 border-gray-300"></td>
                 <td colSpan={5} className="text-center py-3 border border-1 border-gray-300">SALES</td>
                 <td colSpan={4} className="text-center py-3 border border-1 border-gray-300">COLLECTION</td>
-                <td colSpan={1} className=" py-3 border border-1 border-gray-300"></td>
             </tr>
         )
     }
@@ -82,7 +74,6 @@ const PrintDailySummary = () => {
                 columns={columns}
                 records={records}
                 header={header}
-                heading={heading}
                 trigger={trigger}
                 summary={summary}
             />
@@ -94,4 +85,4 @@ const PrintDailySummary = () => {
     )
 }
 
-export default PrintDailySummary
+export default PrintRunningStocks

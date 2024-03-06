@@ -7,6 +7,7 @@ import TemplateDailySales from "./template.daily.sales"
 import TemplateDailySummary from "./template.daily.summary"
 import TemplateMaintenance from "./template.maintenance"
 import TemplateReceivableCollection from "./template.receivable.collection"
+import TemplateRunningStocks from "./template.running.stocks"
 
 const ReportsRecords = ({ setter, manage, refetch, data }) => {
     const [report, setreport] = useState("")
@@ -18,7 +19,8 @@ const ReportsRecords = ({ setter, manage, refetch, data }) => {
         { name: "Daily Inventory", template: "daily-inventory" },
         { name: "Daily Returns", template: "daily-return" },
         { name: "Receivable Collection", template: "receivable-collection" },
-        { name: "Running Inventory" },
+        { name: "Running Stocks", template: "running-stocks" },
+        { name: "Report Template" },
         // { name: "Maintenance", template: "maintenance" },
         // { name: "Daily Summary Range" },
     ]
@@ -53,6 +55,7 @@ const ReportsRecords = ({ setter, manage, refetch, data }) => {
             <TemplateDailyInventory report={report} toggle={toggleOff} />
             <TemplateDailyReturn report={report} toggle={toggleOff} />
             <TemplateMaintenance report={report} toggle={toggleOff} />
+            <TemplateRunningStocks report={report} toggle={toggleOff} />
         </div>
     )
 }

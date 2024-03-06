@@ -49,3 +49,9 @@ export const fetchMaintenance = async (sql) => {
     const res = await axios.get(`${BASE_URL}/migration/download`, opt)
     return res.data
 }
+
+export const fetchRunningStocks = async (fr, to) => {
+    // const opt = { params: { fr: fr, to: to } }
+    const res = await axios.get(`${BASE_URL}/system/reports/running-stocks`)
+    return res.data
+}

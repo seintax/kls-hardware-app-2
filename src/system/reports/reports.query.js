@@ -61,6 +61,14 @@ const dailyReturn = async (param, callback) => {
     })
 }
 
+const runningStocks = async (param, callback) => {
+    let sql = table.reports.runningStocks
+    my.query(sql, async (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, ans)
+    })
+}
+
 module.exports = {
     dailySales,
     dailySummary,
@@ -69,4 +77,5 @@ module.exports = {
     receivableCollection,
     dailyInventory,
     dailyReturn,
+    runningStocks,
 }
