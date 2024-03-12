@@ -35,9 +35,9 @@ const reports = {
     dailySummary: `
         SELECT 
             paym_date AS date,
-            SUM(IF(paym_method='CASH' AND paym_type='SALES', paym_amount, 0)) AS sales_cash, 
-            SUM(IF(paym_method='CHEQUE' AND paym_type='SALES', paym_amount, 0)) AS sales_cheque, 
-            SUM(IF(paym_method='GCASH' AND paym_type='SALES', paym_amount, 0)) AS sales_gcash, 
+            (SUM(IF(paym_method='CASH' AND paym_type='SALES', paym_amount, 0)) + IFNULL(return_sales_cash,0)) AS sales_cash, 
+            (SUM(IF(paym_method='CHEQUE' AND paym_type='SALES', paym_amount, 0)) + IFNULL(return_sales_cheque,0)) AS sales_cheque, 
+            (SUM(IF(paym_method='GCASH' AND paym_type='SALES', paym_amount, 0)) + IFNULL(return_sales_gcash,0)) AS sales_gcash, 
             (SELECT 
                 SUM(trns_net) 
             FROM 
@@ -46,22 +46,32 @@ const reports = {
                 trns_method='CREDIT' AND 
                 trns_date=paym_date 
             GROUP BY trns_date) AS sales_credit,
-            SUM(IF(paym_method='CASH' AND paym_type='CREDIT', paym_amount, 0)) AS credit_cash,
-            SUM(IF(paym_method='CHEQUE' AND paym_type='CREDIT', paym_amount, 0)) AS credit_cheque, 
-            SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', paym_amount, 0)) AS credit_gcash,
+            (SUM(IF(paym_method='CASH' AND paym_type='CREDIT', paym_amount, 0)) + IFNULL(return_credit_cash,0)) AS credit_cash,
+            (SUM(IF(paym_method='CHEQUE' AND paym_type='CREDIT', paym_amount, 0)) + IFNULL(return_credit_cheque,0)) AS credit_cheque, 
+            (SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', paym_amount, 0)) + IFNULL(return_credit_gcash,0)) AS credit_gcash,
             returned 
         FROM
             (SELECT *,DATE(paym_time) AS paym_date FROM pos_payment_collection WHERE
             paym_time BETWEEN '@fr 00:00:01' AND '@to 23:59:59') arg
             LEFT JOIN 
                 (SELECT
-                    DATE(rtrn_time) AS rtrn_date,
+                    DATE(paym_time) AS rtrn_date,
+                    SUM(IF(paym_method='CASH' AND paym_type='SALES', rtrn_r_net, 0)) AS return_sales_cash,
+                    SUM(IF(paym_method='CHEQUE' AND paym_type='SALES', rtrn_r_net, 0)) AS return_sales_cheque,
+                    SUM(IF(paym_method='GCASH' AND paym_type='SALES', rtrn_r_net, 0)) AS return_sales_gcash,
+                    SUM(IF(paym_method='CASH' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_cash,
+                    SUM(IF(paym_method='CHEQUE' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_cheque,
+                    SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_gcash,
                     SUM(rtrn_r_net) AS returned
                 FROM
-                    pos_return_transaction
-                GROUP BY DATE(rtrn_time)) a
-                    ON rtrn_date=paym_date
-        GROUP BY paym_date
+                    pos_return_transaction,
+                    pos_payment_collection 
+                WHERE 
+                    rtrn_trans=paym_trans AND
+                    rtrn_time > '@to 23:59:59'
+                GROUP BY DATE(paym_time)) a
+                    ON a.rtrn_date=arg.paym_date
+        GROUP BY paym_date,returned,return_sales_cash,return_sales_cheque,return_sales_gcash,return_credit_cash,return_credit_cheque,return_credit_gcash
         ORDER BY paym_date DESC;
         `,
     dailyReceivables: `
