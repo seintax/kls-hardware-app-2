@@ -153,6 +153,14 @@ const CasheringReimburse = ({ show, toggle, reimburse, setreimburse, reimburseme
             })
             return
         }
+        const remaining = Number(consume) - Number(value || 0)
+        if (remaining < 0) {
+            handleNotification({
+                type: 'error',
+                message: `Amount cannot be more than remaining amount (${currencyFormat.format(consume)}).`,
+            })
+            return
+        }
         if (amount(currentpayment.amount) < amount(value)) {
             handleNotification({
                 type: 'error',

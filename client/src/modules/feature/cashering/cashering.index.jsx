@@ -466,7 +466,7 @@ const CasheringIndex = () => {
             const totaldiscount = cart?.reduce((prev, curr) => prev + amount(curr?.less), 0)
             const rawnetamount = cart?.reduce((prev, curr) => prev + amount(curr?.input?.net), 0)
             const netamount = cart?.reduce((prev, curr) => prev + amount(curr?.net), 0)
-            const forreturn = cart?.reduce((prev, curr) => prev + amount(curr?.toreturn), 0)
+            const forreturn = cart?.reduce((prev, curr) => prev + Number(curr?.toreturn), 0)
             const returnvat = cart?.reduce((prev, curr) => prev + amount(curr?.return?.vat || 0), 0)
             const returnprice = cart?.reduce((prev, curr) => prev + amount(curr?.return?.price || 0), 0)
             const returndiscount = cart?.reduce((prev, curr) => prev + amount(curr?.return?.less || 0), 0)
