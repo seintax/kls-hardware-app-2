@@ -162,6 +162,7 @@ const CreditsRegistry = () => {
                             </span>
                         )
                     }
+                    <span>{total}</span>
                 </div>
             </div>
             <DataRecords

@@ -62,7 +62,7 @@ const CasheringLogged = ({ show, toggle, user, openTransaction }) => {
         return [
             { value: <OnViewer id={item.code} /> },
             { value: item.ordno },
-            { value: moment(item.time).format("MM-DD-YYYY") },
+            { value: moment(item.date).format("MM-DD-YYYY") },
             { value: currencyFormat.format(item.total) },
             { value: currencyFormat.format(item.less) },
             { value: currencyFormat.format(item.net) },

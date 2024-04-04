@@ -105,12 +105,24 @@ const reports = {
             paym_refcode AS cheque,
             paym_refdate AS date
         FROM 
-            pos_payment_collection,
-            pos_sales_credit,
-            pos_archive_customer
+            pos_payment_collection
+            LEFT JOIN (
+                SELECT
+                    cred_id,
+                    cust_name,
+                    cred_trans,
+                    cred_settledon
+                FROM 
+                    pos_sales_credit,
+                    pos_archive_customer
+                WHERE
+                    cred_creditor=cust_id AND
+                    cred_status<>'ON-GOING'
+            ) a ON
+                cred_trans=paym_trans AND
+                DATE_FORMAT(cred_settledon - INTERVAL 8 HOUR, "%Y-%m-%d %H") = DATE_FORMAT(paym_time, "%Y-%m-%d %H")
         WHERE
-            paym_trans=cred_trans AND 
-            cred_creditor=cust_id AND 
+            paym_type='CREDIT' AND
             paym_time BETWEEN '@fr 00:00:01' AND '@to 23:59:59'
         ORDER BY paym_time
     `,

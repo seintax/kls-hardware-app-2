@@ -1,21 +1,34 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/outline"
-import { Fragment } from "react"
+import { Fragment, useState } from "react"
 import { useNotificationContext } from "../../context/notification.context"
 
 const NotificationDelete = ({ name, show, setshow, refetch, handleDelete }) => {
     const { handleNotification } = useNotificationContext()
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const performDelete = async () => {
-        let res = await handleDelete()
-        if (res.success) {
-            handleNotification({
-                type: 'success',
-                message: `Record ${name} has been successfuly deleted.`,
-            })
-            refetch()
-            setshow(false)
+        setIsDeleting(true)
+        try {
+            let res = await handleDelete()
+            if (res.success) {
+                handleNotification({
+                    type: 'success',
+                    message: `Record ${name} has been successfuly deleted.`,
+                })
+                refetch()
+                setIsDeleting(false)
+                setshow(false)
+            }
         }
+        catch (err) {
+            setIsDeleting(false)
+            console.error(err)
+        }
+    }
+
+    const onCancel = () => {
+        setshow(false)
     }
 
     return (
@@ -86,13 +99,15 @@ const NotificationDelete = ({ name, show, setshow, refetch, handleDelete }) => {
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                                         onClick={() => performDelete()}
+                                        disabled={isDeleting}
                                     >
                                         Delete
                                     </button>
                                     <button
                                         type="button"
                                         className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                                        onClick={() => setshow(false)}
+                                        onClick={() => onCancel()}
+                                        disabled={isDeleting}
                                     >
                                         Cancel
                                     </button>
