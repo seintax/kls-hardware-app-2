@@ -119,6 +119,18 @@ router.get('/inventory/product', async (req, res) => {
     })
 })
 
+router.patch('/inventory/adjust', async (req, res) => {
+    await service.adjustRecord(req.body, (err, ans) => {
+        if (err) return res.status(200).json({
+            success: false, error: err
+        })
+        return res.status(200).json({
+            success: true,
+            result: ans || {},
+        })
+    })
+})
+
 router.patch('/inventory/transfer', async (req, res) => {
     await service.transferRecord(req.body, (err, ans) => {
         if (err) return res.status(200).json({

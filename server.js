@@ -52,6 +52,7 @@ app.use('/feature', feature.delivery)
 app.use('/feature', feature.transfer)
 app.use('/feature', feature.transported)
 app.use('/feature', feature.prices)
+app.use('/feature', feature.adjustment)
 // LIBRARY
 const library = require('./src/control/library.controller')
 app.use('/library', library.category)

@@ -10,6 +10,7 @@ import { generateZeros } from "../../../utilities/functions/string.functions"
 import DataOperation from '../../../utilities/interface/datastack/data.operation'
 import DataRecords from '../../../utilities/interface/datastack/data.records'
 import NotificationDelete from '../../../utilities/interface/notification/notification.delete'
+import InventoryAdjust from "./inventory.adjust"
 import InventoryConvert from "./inventory.convert"
 import InventoryPrices from "./inventory.prices"
 import { deleteInventory } from './inventory.services'
@@ -20,6 +21,7 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
     const { setSelected } = useClientContext()
     const [showConvert, setShowConvert] = useState(false)
     const [records, setrecords] = useState()
+    const [showAdjust, setShowAdjust] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [showPrice, setShowPrice] = useState(false)
     const [currentRecord, setCurrentRecord] = useState({})
@@ -90,7 +92,7 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
     }
 
     const balanceStatus = (item) => {
-        let balance = amount(item.received) - (amount(item.stocks) + amount(item.soldtotal) + amount(item.trnitotal) + amount(item.convtotal))
+        let balance = amount(item.received) - (amount(item.stocks) + amount(item.soldtotal) + amount(item.trnitotal) + amount(item.convtotal) + amount(item.mnusadjmt) - amount(item.plusadjmt))
         if (balance !== 0) {
             return true
         }
@@ -129,11 +131,24 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
         )
     }
 
+    const toggleAdjust = (item) => {
+        if (item.balanceStatus) {
+            handleNotification({
+                type: 'error',
+                message: <div className="flex gap-1 items-center">Resolve <ExclamationTriangleIcon className="w-4 h-4 text-red-400" /> before adjusting.</div>
+            })
+            return
+        }
+        setCurrentRecord(item)
+        setShowAdjust(true)
+    }
+
     const actions = (item) => {
         return [
             // { type: 'button', trigger: () => { }, label: <ExclamationTriangleIcon className="w-4 h-4" />, hidden: !balanceStatus(item) },
             { type: 'button', trigger: () => { }, label: <ExclamationTriangleIcon className="w-4 h-4" />, hidden: !item.balanceStatus },
             { type: 'button', trigger: () => { }, label: displayStatus(item) },
+            { type: 'button', trigger: () => toggleAdjust(item), label: 'Adjust' },
             { type: 'button', trigger: () => togglePrice(item), label: 'Price' },
             { type: 'button', trigger: () => toggleCovert(item), label: 'Convert' },
             { type: 'button', trigger: () => toggleDelete(item), label: 'Delete' }
@@ -294,6 +309,11 @@ const InventoryRecords = ({ setter, manage, refetch, data, setprintable, showErr
                 show={showConvert}
                 setshow={setShowConvert}
                 reference={currentRecord}
+            />
+            <InventoryAdjust
+                reference={currentRecord}
+                show={showAdjust}
+                setshow={setShowAdjust}
             />
         </>
     )

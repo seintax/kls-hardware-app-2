@@ -135,7 +135,7 @@ const inventoryRecord = async (param, callback) => {
     let { item, conv, dispense, id } = table.dispensing.fields
     let options = {
         parameter: [param.item?.Exact(), "0", "0"],
-        filter: [item?.Is(), conv?.Is(), dispense?.Greater()],
+        filter: [item?.Is(), conv?.IfNullToZero()?.Is(), dispense?.Greater()],
         order: [id?.Asc()]
     }
     // let sql = query.builder.rec(table.dispensing, options.filter, options.order)
@@ -156,7 +156,7 @@ const productItemRecord = async (param, callback) => {
     let options = {
         fields: [product?.AliasAs('product'), unit?.AliasAs('unit'), dispense?.SumAs('total')],
         parameter: [param.product?.Exact(), "0", "0"],
-        filter: [product?.Is(), conv?.Is(), dispense?.Greater()],
+        filter: [product?.Is(), conv?.IfNullToZero()?.Is(), dispense?.Greater()],
         group: [product, unit],
         order: [product?.Asc()]
     }

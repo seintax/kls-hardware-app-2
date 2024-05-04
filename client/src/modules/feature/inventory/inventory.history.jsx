@@ -9,7 +9,7 @@ import { amount, currencyFormat } from "../../../utilities/functions/number.funt
 import { generateZeros } from "../../../utilities/functions/string.functions"
 import { fetchDispensingByInventory, fetchReturnByInventory } from "../cashering/cashering.service"
 import { fetchTransportedByInventory } from "../transfer/transfer.services"
-import { fetchConversionByInventory, fetchInventoryById, stocksInventory } from "./inventory.services"
+import { fetchAdjustmentByInventory, fetchConversionByInventory, fetchInventoryById, stocksInventory } from "./inventory.services"
 
 const InventoryHistory = () => {
     const { handleNotification } = useNotificationContext()
@@ -23,10 +23,12 @@ const InventoryHistory = () => {
     const [trni, settrni] = useState()
     const [conv, setconv] = useState()
     const [rtrn, setrtrn] = useState()
+    const [adjm, setadjm] = useState()
     const [totdisp, settotdisp] = useState(0)
     const [totconv, settotconv] = useState(0)
     const [tottrni, settottrni] = useState(0)
     const [totrtrn, settotrtrn] = useState(0)
+    const [totadjm, settotadjm] = useState(0)
 
     useEffect(() => {
         handleTrail(location?.pathname)
@@ -68,15 +70,22 @@ const InventoryHistory = () => {
                 settotrtrn(res.result?.reduce((prev, curr) => prev + amount(curr.qty), 0))
             }
 
+            const getAdjustment = async (id) => {
+                let res = await fetchAdjustmentByInventory(id)
+                setadjm(res.result)
+                settotadjm(res.result?.reduce((prev, curr) => curr.operator === "Plus" ? (prev + amount(curr.quantity)) : (prev - amount(curr.quantity)), 0))
+            }
+
             getDispensing(data?.id)
             getTransported(data?.id)
             getConverted(data?.id)
             getReturned(data?.id)
+            getAdjustment(data?.id)
         }
     }, [data, instance])
 
     const balanceStatus = (item) => {
-        let balance = amount(item?.received) - (amount(item?.stocks) + amount(item?.soldtotal || 0) + amount(item?.trnitotal || 0) + amount(item?.convtotal || 0))
+        let balance = amount(item?.received) - (amount(item?.stocks) + amount(item?.soldtotal || 0) + amount(item?.trnitotal || 0) + amount(item?.convtotal || 0) - amount(item?.plusadjmt || 0) + amount(item?.mnusadjmt || 0))
         return balance
     }
 
@@ -101,6 +110,9 @@ const InventoryHistory = () => {
                     >
                         Back to Previous List
                     </Link>
+                    <span className="font-semibold text-xl">
+                        REF: {data?.id}
+                    </span>
                 </div>
             </div>
             <div className="flex flex-col no-select">
@@ -151,6 +163,7 @@ const InventoryHistory = () => {
                 <div className="w-full pl-3 py-2">Item Code</div>
                 <div className="w-full pl-0 py-2">Transaction</div>
                 <div className="w-full pl-3 py-2">Quantity</div>
+                <div className="w-full pl-3 py-2">Details</div>
             </div>
             <div className="flex flex-col justify-between shadow ring-1 ring-black ring-opacity-5 md:mx-0 md:rounded-t-lg grow overflow-y-scroll">
                 <div className="h-full">
@@ -166,6 +179,7 @@ const InventoryHistory = () => {
                                 <div className="w-full pl-3 py-2">{`D-${generateZeros(d.item, 6)}-${generateZeros(d.id, 8)}`}</div>
                                 <div className="w-full pl-3 py-2">{d.code}</div>
                                 <div className="w-full pl-10 py-2">{d.dispense}</div>
+                                <div className="w-full pl-10 py-2"></div>
                             </div>
                         ))
                     }
@@ -201,6 +215,7 @@ const InventoryHistory = () => {
                                 {totconv}
                             </div>
                         </div>
+                        <div className="w-full pl-10 py-2"></div>
                     </div>
                     <div className="flex items-center mt-2">
                         <div className="w-full pl-3 py-2 font-bold">Transferred: {trni?.length ? "" : <span className="font-normal">No items transferred.</span>}</div>
@@ -214,6 +229,7 @@ const InventoryHistory = () => {
                                 <div className="w-full pl-3 py-2">{`T-${generateZeros(t.item, 6)}-${generateZeros(t.id, 8)}`}</div>
                                 <div className="w-full pl-3 py-2">{moment(t.time).format("YYYY-MM-DD hh:mm:ss A")}</div>
                                 <div className="w-full pl-10 py-2">{t.qty}</div>
+                                <div className="w-full pl-10 py-2"></div>
                             </div>
                         ))
                     }
@@ -225,6 +241,7 @@ const InventoryHistory = () => {
                                 {tottrni}
                             </div>
                         </div>
+                        <div className="w-full pl-10 py-2"></div>
                     </div>
                     <div className="flex items-center mt-2">
                         <div className="w-full pl-3 py-2 font-bold">Returned: {rtrn?.length ? "" : <span className="font-normal">No items returned.</span>}</div>
@@ -235,6 +252,7 @@ const InventoryHistory = () => {
                                 <div className="w-full pl-3 py-2">{`R-${generateZeros(r.item, 6)}-${generateZeros(r.id, 8)}`}</div>
                                 <div className="w-full pl-3 py-2">{moment(r.time).format("YYYY-MM-DD hh:mm:ss A")}</div>
                                 <div className="w-full pl-10 py-2">{r.qty}</div>
+                                <div className="w-full pl-10 py-2"></div>
                             </div>
                         ))
                     }
@@ -246,6 +264,32 @@ const InventoryHistory = () => {
                                 {totrtrn}
                             </div>
                         </div>
+                        <div className="w-full pl-10 py-2"></div>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <div className="w-full pl-3 py-2 font-bold">Adjusted: {adjm?.length ? "" : <span className="font-normal">No items adjusted.</span>}</div>
+                    </div>
+                    {
+                        adjm?.map(r => (
+                            <div key={`D-${r.item}-${r.id}`} className="flex items-center hover:bg-yellow-200">
+                                <div className="w-full pl-3 py-2">{`A-${generateZeros(r.item, 6)}-${generateZeros(r.id, 8)}`}</div>
+                                <div className="w-full pl-3 py-2">{moment(r.time).format("YYYY-MM-DD hh:mm:ss A")}</div>
+                                <div className="w-full pl-10 py-2">
+                                    {r.operator === "Plus" ? "+" : "-"}{r.quantity}
+                                </div>
+                                <div className="w-full pl-10 py-2">{r.details}</div>
+                            </div>
+                        ))
+                    }
+                    <div className={`flex items-center ${adjm?.length ? "" : "hidden"}`}>
+                        <div className="w-full pl-3 py-2"></div>
+                        <div className="w-full pl-3 py-2 text-right font-bold">Total</div>
+                        <div className="w-full pl-5">
+                            <div className="py-2 pl-3 border-t-2 border-t-gray-400 w-[100px]">
+                                {totadjm}
+                            </div>
+                        </div>
+                        <div className="w-full pl-10 py-2"></div>
                     </div>
                 </div>
             </div>

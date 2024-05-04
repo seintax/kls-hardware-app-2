@@ -103,3 +103,11 @@ String.prototype.DateFormat = function (val = undefined) {
     return `DATE(${base})`
 }
 
+String.prototype.IfNullToZero = function () {
+    return this === undefined ? "0" : `IFNULL(${this.toString()}, 0)`
+}
+
+String.prototype.IfNullToValue = function (val) {
+    return this === undefined ? val : `IFNULL(${this.toString()}, ${val})`
+}
+

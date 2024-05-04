@@ -6,6 +6,7 @@ const conversion = require('../feature/conversion/conversion.route')
 const transfer = require('../feature/transfer/transfer.route')
 const transported = require('../feature/transported/transported.route')
 const prices = require('../feature/prices/prices.route')
+const adjustment = require("../feature/adjustment/adjustment.route")
 
 module.exports = {
     supplier,
@@ -16,4 +17,5 @@ module.exports = {
     transfer,
     transported,
     prices,
+    adjustment,
 }
