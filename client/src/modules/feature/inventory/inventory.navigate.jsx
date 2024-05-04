@@ -104,7 +104,7 @@ const InventoryNavigate = ({ label, name, search, setSearch, printable, showErro
                     <ArchiveBoxArrowDownIcon className="w-5 h-5" /> With Stocks Only
                 </button>
                 {
-                    user.id === 1 ? (
+                    user?.id === 1 ? (
                         <button className="border border-1 border-primary-700 px-3 rounded-lg font-normal text-sm no-select py-2 bg-gradient-to-r from-primary-400 to-primary-500 text-white hover:from-primary-500 hover:to-primary-700" onClick={() => balanceAlgorithm()}>
                             Balance Inventory
                         </button>

@@ -193,6 +193,18 @@ const productRecord = async (param, callback) => {
     })
 }
 
+const adjustRecord = async (param, callback) => {
+    let sql = (
+        param.op === "add" ?
+            table.inventory.adjustmentAdded.replaceAll("@qty", param.qty) :
+            table.inventory.adjustmentMinus.replaceAll("@qty", param.qty)
+    )
+    my.query(sql, [param.id], async (err, ans) => {
+        if (err) return callback(err)
+        return callback(null, ans)
+    })
+}
+
 const transferRecord = async (param, callback) => {
     let sql = (
         param.op === "add" ?
@@ -286,4 +298,5 @@ module.exports = {
     balanceRecord,
     libraryRecord,
     stocksRecord,
+    adjustRecord,
 }

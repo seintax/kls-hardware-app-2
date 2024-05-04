@@ -164,6 +164,8 @@ CREATE TABLE pos_stock_inventory (
     invt_trni_total  decimal(10,2) DEFAULT 0,
     invt_conv_spare  decimal(10,2) DEFAULT 0,
     invt_sold_total  decimal(10,2) DEFAULT 0,
+    invt_plus_adjmt  decimal(10,2) DEFAULT 0,
+    invt_mnus_adjmt  decimal(10,2) DEFAULT 0,
     invt_vatable     varchar(1) DEFAULT "Y",
     invt_isloose     varchar(1) DEFAULT "N",
     invt_acquisition varchar(20) DEFAULT 'PROCUREMENT',
@@ -181,6 +183,9 @@ ALTER TABLE pos_stock_inventory ADD COLUMN invt_conv_value decimal(30,2) DEFAULT
 ALTER TABLE pos_stock_inventory ADD COLUMN invt_trni_value decimal(30,2) DEFAULT 0 AFTER invt_conv_value;
 
 ALTER TABLE pos_stock_inventory ADD COLUMN invt_sold_total decimal(10,2) DEFAULT 0 AFTER invt_trni_total;
+
+ALTER TABLE pos_stock_inventory ADD COLUMN invt_plus_adjmt decimal(10,2) DEFAULT 0 AFTER invt_sold_total;
+ALTER TABLE pos_stock_inventory ADD COLUMN invt_mnus_adjmt decimal(10,2) DEFAULT 0 AFTER invt_plus_adjmt;
 
 ALTER TABLE pos_stock_inventory
     ADD COLUMN invt_category varchar(75),
@@ -283,6 +288,21 @@ CREATE TABLE pos_stock_price_change (
     chng_old_price   decimal(30,2),
     chng_new_price   decimal(30,2),
     chng_acquisition varchar(20) DEFAULT 'PROCUREMENT'
+);
+
+CREATE TABLE pos_stock_adjustment (
+    adjt_id          int auto_increment primary key,
+    adjt_time        timestamp DEFAULT now(),
+    adjt_item        int,
+    adjt_product     int,
+    adjt_conv        int DEFAULT 0,
+    adjt_price       decimal(30,2),
+    adjt_old_stocks  decimal(10,2) COMMENT 'original stocks',
+    adjt_operator    varchar(10) COMMENT 'value is either plus or minus',
+    adjt_quantity    decimal(10,2),
+    adjt_new_stocks  decimal(10,2) COMMENT 'output stocks',
+    adjt_details     varchar(99),
+    adjt_remarks     varchar(99)
 );
 
 CREATE TABLE pos_sales_transaction (

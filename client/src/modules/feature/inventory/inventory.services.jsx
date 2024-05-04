@@ -68,6 +68,12 @@ export const transferInventory = async (id, qty, op) => {
     return res.data
 }
 
+export const adjustInventory = async (id, qty, op) => {
+    const opt = { id: id, qty: qty, op: op }
+    const res = await axios.patch(`${BASE_URL}/feature/inventory/adjust`, opt)
+    return res.data
+}
+
 export const libraryInventory = async () => {
     const res = await fetchInventoryByLibrary()
     let value = res?.result?.map(data => {
@@ -104,6 +110,11 @@ export const stocksInventory = async (id) => {
 
 export const createInventoryPrice = async (data) => {
     const res = await axios.post(`${BASE_URL}/feature/prices`, data)
+    return res.data
+}
+
+export const createInventoryAdjustment = async (data) => {
+    const res = await axios.post(`${BASE_URL}/feature/adjustment`, data)
     return res.data
 }
 
@@ -146,3 +157,8 @@ export const searchConversion = async (search, all) => {
     return res.data
 }
 
+export const fetchAdjustmentByInventory = async (item) => {
+    const opt = { params: { item: item } }
+    const res = await axios.get(`${BASE_URL}/feature/adjustment/inventory`, opt)
+    return res.data
+}

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { useClientContext } from "../../../utilities/context/client.context"
+import { useNotificationContext } from "../../../utilities/context/notification.context"
 import { sortBy } from '../../../utilities/functions/array.functions'
 import { currencyFormat } from "../../../utilities/functions/number.funtions"
 import DataOperation from '../../../utilities/interface/datastack/data.operation'
 import DataRecords from '../../../utilities/interface/datastack/data.records'
+import { balanceCustomer } from "../../library/customer/customer.services"
 
 const CreditsRecords = ({ setter, manage, refetch, data }) => {
+    const { handleNotification } = useNotificationContext()
     const navigate = useNavigate()
     const { setSelected, clearSearchKey } = useClientContext()
     const [records, setrecords] = useState()
@@ -49,10 +52,21 @@ const CreditsRecords = ({ setter, manage, refetch, data }) => {
         navigate(`/credits/${item.id}/paid`)
     }
 
+    const syncCreditor = async (item) => {
+        const res = await balanceCustomer({ id: item.id })
+        if (res.success) {
+            handleNotification({
+                type: 'success',
+                message: `Creditor ${item.name}'s credit value has been synced to its existing records. View or reload credit list`,
+            })
+        }
+    }
+
     const actions = (item) => {
         return [
             { type: 'button', trigger: () => viewCreditor(item), label: 'View' },
             { type: 'button', trigger: () => viewSettled(item), label: 'Logs' },
+            { type: 'button', trigger: () => syncCreditor(item), label: 'Sync' },
         ]
     }
 
