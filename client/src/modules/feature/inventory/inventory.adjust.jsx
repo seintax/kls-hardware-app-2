@@ -46,7 +46,7 @@ const InventoryAdjust = ({ reference, show, setshow }) => {
         useEffect(() => {
             if (show) {
                 const subscription = watch((value, { name }) => {
-                    if (name === 'quantity') {
+                    if (name === 'quantity' || name === "operation") {
                         if (!value?.operation) return
                         setValue("newstocks", value?.operation === "Plus"
                             ? Number(reference?.stocks) + Number(value?.quantity)

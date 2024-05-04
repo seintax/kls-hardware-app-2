@@ -23,6 +23,8 @@ const inventory = {
         trnitotal: 'invt_trni_total',
         convspare: 'invt_conv_spare',
         soldtotal: 'invt_sold_total',
+        plusadjmt: 'invt_plus_adjmt',
+        mnusadjmt: 'invt_mnus_adjmt',
         vatable: 'invt_vatable',
         isloose: 'invt_isloose',
         acquisition: 'invt_acquisition',

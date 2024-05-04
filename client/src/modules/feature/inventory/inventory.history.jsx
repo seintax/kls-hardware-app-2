@@ -277,7 +277,7 @@ const InventoryHistory = () => {
                                 <div className="w-full pl-10 py-2">
                                     {r.operator === "Plus" ? "+" : "-"}{r.quantity}
                                 </div>
-                                <div className="w-full pl-10 py-2">{r.details}</div>
+                                <div className="w-full pl-10 py-2 text-xs">{r.details}</div>
                             </div>
                         ))
                     }
