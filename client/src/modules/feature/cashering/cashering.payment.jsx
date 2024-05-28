@@ -118,6 +118,13 @@ const CasheringPayment = ({ show, toggle, cart, transno, shiftno, settrans, rece
                     return
                 }
             }
+            if (!entry.creditor) {
+                handleNotification({
+                    type: 'error',
+                    message: `Customer reference is required.`,
+                })
+                return
+            }
             setpayments([{
                 index: moment(new Date()).format("YYYY-MM-DD-HH-mm-SS"),
                 code: transno.code,
