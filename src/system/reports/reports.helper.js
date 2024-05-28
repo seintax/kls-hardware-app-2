@@ -61,8 +61,7 @@ const reports = {
                     SUM(IF(paym_method='GCASH' AND paym_type='SALES', rtrn_r_net, 0)) AS return_sales_gcash,
                     SUM(IF(paym_method='CASH' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_cash,
                     SUM(IF(paym_method='CHEQUE' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_cheque,
-                    SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_gcash,
-                    SUM(rtrn_r_net) AS returned
+                    SUM(IF(paym_method='GCASH' AND paym_type='CREDIT', rtrn_r_net, 0)) AS return_credit_gcash
                 FROM
                     pos_return_transaction,
                     pos_payment_collection 
@@ -71,6 +70,16 @@ const reports = {
                     rtrn_time > '@to 23:59:59'
                 GROUP BY DATE(paym_time)) a
                     ON a.rtrn_date=arg.paym_date
+            LEFT JOIN
+                (SELECT
+                    DATE(rtrn_time) AS rtrn_date,
+                    SUM(rtrn_r_net) AS returned
+                FROM 
+                    pos_return_transaction
+                WHERE 
+                    rtrn_time BETWEEN '@fr 00:00:01' AND '@to 23:59:59' 
+                GROUP BY DATE(rtrn_time)) b
+                    ON b.rtrn_date=arg.paym_date
         GROUP BY paym_date,returned,return_sales_cash,return_sales_cheque,return_sales_gcash,return_credit_cash,return_credit_cheque,return_credit_gcash
         ORDER BY paym_date DESC;
         `,
