@@ -47,6 +47,7 @@ const AccountIndex = lazy(() => import('./modules/system/account/account.index')
 const ReportsIndex = lazy(() => import('./modules/system/reports/reports.index'))
 const ActivityIndex = lazy(() => import('./modules/system/activity/activity.index'))
 const ConfigIndex = lazy(() => import('./modules/system/config/config.index'))
+const DatabaseIndex = lazy(() => import('./modules/system/database/database.index'))
 
 const AppRoute = () => {
     return (
@@ -167,6 +168,9 @@ const AppRoute = () => {
                 <Route
                     path="/config"
                     element={<AppLazy><ConfigIndex /></AppLazy>} />
+                <Route
+                    path="/database"
+                    element={<AppLazy><DatabaseIndex /></AppLazy>} />
             </Route>
             <Route path="/error" element={<AppErrorFallback />} />
             <Route path="*" element={<AppPageNotFound />} />

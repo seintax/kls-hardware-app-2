@@ -7,6 +7,7 @@ import { Fragment, useEffect, useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { version } from "../../../../../package.json"
 import { userNavigation } from "../../../../modules/feature/dashboard/dashboard.index.jsx"
+import { useClientContext } from "../../../context/client.context.jsx"
 import AppLogo from "../aesthetics/app.logo.jsx"
 import AppNavigation from "./app.navigation.jsx"
 
@@ -14,6 +15,7 @@ export default function AppSideBar({ menulist }) {
     const navigate = useNavigate()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [sidebarMenu, setSidebarMenu] = useState([])
+    const { user } = useClientContext()
 
     useEffect(() => {
         setSidebarMenu(menulist)
@@ -111,6 +113,20 @@ export default function AppSideBar({ menulist }) {
                         </div>
                     )
                 ))}
+                {
+                    user.name === "DEVELOPER" && (
+                        <div
+                            className={`${normalLink} group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer`}
+                            onClick={() => navigate("/database")}
+                        >
+                            <ChevronRightIcon
+                                className="text-gray-400 mr-3 flex-shrink-0 h-6 w-6 group-hover:text-gray-500"
+                                aria-hidden="true"
+                            />
+                            Database
+                        </div>
+                    )
+                }
                 <div className="absolute bottom-[2px] px-2 text-sm">v{version}</div>
             </nav>
         )
